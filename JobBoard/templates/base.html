@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %} Job Board {% endblock %}</title>
+        <!-- Latest compiled and minified CSS -->
+        <!-- see http://netdna.bootstrapcdn.com/#bootswatch for some other "flavors" to try -->
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+        
+		<!-- Latest compiled and minified JavaScript -->
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+        <style type="text/css">
+        	body {padding: 50px 0 0 0; margin: 0; background-color: #8ec1da;}
+			.lightBlue {background-color: #c0deed; padding-top: 10px;}
+			.copyright {margin-top: 10px;}
+			.panel {-webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px;}
+			.panel-body h3 {margin: 0; padding: 0;}
+		</style>
+		
+        {% block extrascripts %}{% endblock %}
+    </head>
+    <body>
+		<!-- Static navbar -->
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="/"><span class="glyphicon glyphicon-home"> Home</span></a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+                   		{% if user.is_authenticated %}
+							<li><a href="{% url 'board:index' %}">Profile</a></li>
+							<li><a href="/admin/">Admin</a></li>
+							<li><a href="{% url 'auth_logout' %}">Sign Out</a></li>
+						{% else %}
+							<li><a href="{% url 'auth_login' %}">Sign In</a></li>
+                    	{% endif %}
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>
+		<div class="container lightBlue">
+			<div class="body-content">
+				{% block content %}
+            	{% endblock %}
+			</div><!-- body-content -->
+		</div><!-- container -->
+	</body>
+<html>
