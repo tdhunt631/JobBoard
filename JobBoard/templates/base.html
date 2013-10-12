@@ -11,40 +11,64 @@
         <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
         <style type="text/css">
-        	body {padding: 50px 0 0 0; margin: 0; background-color: #8ec1da;}
-			.lightBlue {background-color: #c0deed; padding-top: 10px;}
-			.copyright {margin-top: 10px;}
-			.panel {-webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px;}
-			.panel-body h3 {margin: 0; padding: 0;}
+			ul.nav li.dropdown:hover ul.dropdown-menu{display: block;}
+			body{padding-top: 25px;}
+			.container{width: 1000px;}
 		</style>
 		
         {% block extrascripts %}{% endblock %}
     </head>
     <body>
-		<!-- Static navbar -->
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
+	<!-- Static navbar -->
+		<div class="container">
+			<div class="navbar navbar-default">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">Job Board</a>
+				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="/"><span class="glyphicon glyphicon-home"> Home</span></a></li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Employers <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								{% if not user.is_authenticated %}
+									<li><a href="{% url 'auth_login' %}">Login</a></li>
+									<li><a href="{% url 'registration_register' %}">Register</a></li>
+									<li><a href="/">Post a job</a></li>
+								{% else %}
+									<li><a href="{% url 'auth_logout' %}">Logout</a></li>
+									<li class="divider"></li>
+									<li><a href="/">Company profile</a></li>
+									<li><a href="/">Post a job</a></li>
+									<li><a href="/">My job posts</a></li>
+								{% endif %}
+							</ul>
+						</li>
+						<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Job Seekers <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Subscribe</a></li>
+								<li><a href="#">Unsubscribe</a></li>
+								<li><a href="#">View job posts</a></li>
+							</ul>
+						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-                   		{% if user.is_authenticated %}
-							<li><a href="{% url 'board:index' %}">Profile</a></li>
-							<li><a href="/admin/">Admin</a></li>
-							<li><a href="{% url 'auth_logout' %}">Sign Out</a></li>
+						{% if not user.is_authenticated %}
+							<li><a href="{% url 'auth_login' %}">Employer Login</a></li>
+							<li><a href="{% url 'registration_register' %}">Register</a></li>
 						{% else %}
-							<li><a href="{% url 'auth_login' %}">Sign In</a></li>
-                    	{% endif %}
+							{% if user.is_staff %}
+								<li><a href="/admin/">Admin</a></li>
+							{% endif %}
+							<li><a href="{% url 'auth_logout' %}">Logout</a></li>
+						{% endif %}
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>
+		</div>	
+		<div class="container">
+			{% block content %}
+			{% endblock %}
 		</div>
-		<div class="container lightBlue">
-			<div class="body-content">
-				{% block content %}
-            	{% endblock %}
-			</div><!-- body-content -->
-		</div><!-- container -->
 	</body>
 <html>
