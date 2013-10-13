@@ -5,6 +5,8 @@ from django.forms import ModelForm, ModelChoiceField
 from sorl.thumbnail import ImageField
 from django_summernote.widgets import SummernoteWidget
 
+## MODELS ##
+
 class Profile(models.Model):
 	user = models.ForeignKey(User)
 	companyName = models.CharField(max_length=100)
@@ -12,7 +14,7 @@ class Profile(models.Model):
 	website = models.CharField(max_length=100)
 	contactName = models.CharField(max_length=50)
 	contactEmail = models.CharField(max_length=50)
-	logo = ImageField(upload_to='media/logos/', blank=True, null=True)
+	logo = ImageField(upload_to='media/logos/', blank=True)
 
 	def __unicode__(self):
 		return self.companyName	
@@ -45,4 +47,19 @@ class Post(models.Model):
 	def __unicode__(self):
 		return self.title
 	
+## FORMS ##
+
+class CreateProfileForm(ModelForm):
+	description = forms.CharField(widget=SummernoteWidget())  #replaced the TextArea widget
+
+	class Meta:
+		model = Profile
+		fields = ['logo','companyName','description','website','contactName','contactEmail',]	
 	
+	def __init__(self, *args, **kwargs):
+		super(CreateProfileForm, self).__init__(*args, **kwargs)
+		self.fields['description'].label = "Company Description"
+		self.fields['companyName'].label = "Company Name"
+		self.fields['contactName'].label = "Contact Name"
+		self.fields['contactEmail'].label = "Contact Email"
+

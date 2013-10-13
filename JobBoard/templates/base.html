@@ -33,22 +33,22 @@
 								{% if not user.is_authenticated %}
 									<li><a href="{% url 'auth_login' %}">Login</a></li>
 									<li><a href="{% url 'registration_register' %}">Register</a></li>
-									<li><a href="/">Post a job</a></li>
+									<li><a href="{% url 'board:post' %}">Post a job</a></li>
 								{% else %}
 									<li><a href="{% url 'auth_logout' %}">Logout</a></li>
 									<li class="divider"></li>
-									<li><a href="/">Company profile</a></li>
-									<li><a href="/">Post a job</a></li>
-									<li><a href="/">My job posts</a></li>
+									<li><a href="{% url 'board:profile' %}">Company profile</a></li>
+									<li><a href="{% url 'board:post' %}">Post a job</a></li>
+									<li><a href="{% url 'board:myPosts' %}">My job posts</a></li>
 								{% endif %}
 							</ul>
 						</li>
 						<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Job Seekers <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Subscribe</a></li>
-								<li><a href="#">Unsubscribe</a></li>
-								<li><a href="#">View job posts</a></li>
+								<li><a href="{% url 'board:subscribe' %}">Subscribe</a></li>
+								<li><a href="{% url 'board:unsubscribe' %}">Unsubscribe</a></li>
+								<li><a href="{% url 'board:index' %}">View job posts</a></li>
 							</ul>
 						</li>
 					</ul>

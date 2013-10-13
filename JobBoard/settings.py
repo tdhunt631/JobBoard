@@ -122,7 +122,7 @@ TEMPLATE_DIRS = (
 
 import django.conf.global_settings as DEFAULT_SETTINGS
 TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
-'django.contrib.messages.context_processors.messages',\
+'django.contrib.messages.context_processors.messages',
 )
 
 INSTALLED_APPS = (
