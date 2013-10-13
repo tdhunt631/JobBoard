@@ -4,4 +4,5 @@ from board import views
 urlpatterns = patterns('',
 	url(r'^$', views.index, name="index"),
 	url(r'^accounts/', include('registration.backends.simple.urls')),
+	(r'^summernote/', include('django_summernote.urls')),
 )
