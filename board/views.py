@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from board.models import *
 from django.template import RequestContext
-
+from django.contrib import messages
 
 def index(request):
 	if request.user.is_authenticated():
@@ -23,15 +23,23 @@ def index(request):
 
 @login_required
 def profile(request):
-	try:
+	if request.method == 'POST':
+		user = get_object_or_404(User, id=request.user.id)
 		profile = get_object_or_404(Profile, user=request.user.id)
-		context = {
-			'profile': profile,
-		}		
-		return render(request, 'board/profile.html', context)
+		data = CreateProfileForm(request.POST, request.FILES, instance=profile)
+		form = data.save(commit=False)
+		form.user = user
+		form.save()
+		messages.add_message(request, messages.SUCCESS, "Your profile has been updated.")
+		return HttpResponseRedirect('/')
 
-	except:
-		return HttpResponseRedirect('/createProfile/')
+	else:
+		profile = get_object_or_404(Profile, user=request.user.id)
+		form = CreateProfileForm(instance=profile)
+		context = {
+			'form': form,
+		}
+		return render(request, 'board/profile.html', context)
 
 @login_required
 def createProfile(request):
