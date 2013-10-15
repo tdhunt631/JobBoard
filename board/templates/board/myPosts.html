@@ -2,6 +2,42 @@
 
 {% block title %}My Posts{% endblock %}
 
-{% block content %}
-	{{ hello }}
+{% block content %}	{% if messages %}
+	<div class="alert alert-success">
+   		{% for message in messages %}
+   			{{ message }}
+   		{% endfor %}
+	</div>
+{% endif %}
+	<h2>My job posts</h2>
+	<table class="table">
+		<tr>
+			<th>Job Title</th>
+			<th>Job Type</th>
+			<th>Wage</th>
+			<th>Published Date</th>
+			<th>Expiration Date</th>
+			<th>Status</th>
+			<th>Job Views</th>
+			<th></th>
+		</tr>
+		{% for job in jobs %}
+		<tr>
+			<td>{{ job.title }}</td>
+			<td>{{ job.jobType }}</td>
+			<td>{{ job.wage }}</td>
+			<td>{{ job.publishDate }}</td>
+			<td>{{ job.expirationDate }}</td>
+			<td>
+				{% if job.active == True %}
+					Active
+				{% else %}
+					Inactive
+				{% endif %}
+			</td>
+			<td>{{ job.views }}</td>
+			<td><a href="{% url 'board:editPost' job.id %}" class="btn btn-primary btn-xs">Edit</a></td>
+		</tr>
+		{% endfor %}
+	</table>
 {% endblock %}

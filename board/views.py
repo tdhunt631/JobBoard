@@ -54,6 +54,7 @@ def createProfile(request):
 			form = data.save(commit=False)
 			form.user = user
 			form.save()
+			messages.add_message(request, messages.SUCCESS, "Your profile has been created. You may now post your job.")
 			return HttpResponseRedirect('/post/')
 
 		else:
@@ -64,22 +65,54 @@ def createProfile(request):
 			return render(request, 'board/createProfile.html', context)
 
 @login_required
-def post(request):
-			
-	hello = "post new job page"
-	context = {
-		'hello': hello,
-	}
-	return render(request, 'board/post.html', context)
-
-@login_required
 def myPosts(request):
-
-	hello = "my posts"
+	profile = get_object_or_404(Profile, user=request.user.id)
+	jobs = Post.objects.filter(profile=profile)
 	context = {
-		'hello': hello,
+		'jobs': jobs,
 	}
 	return render(request, 'board/myPosts.html', context)
+
+@login_required
+def post(request):
+	if request.method == 'POST':
+		profile = get_object_or_404(Profile, user=request.user.id)
+		data = PostForm(request.POST)
+		form = data.save(commit=False)
+		form.profile = profile
+		form.save()
+		messages.add_message(request, messages.SUCCESS, "Thanks.  Your job has been posted successfully.")
+		return HttpResponseRedirect('/myPosts/')
+
+	else:
+		form = PostForm()
+		context = {
+			'form': form,
+		}
+		return render(request, 'board/post.html', context)
+
+@login_required
+def editPost(request, post_id):
+	profile = get_object_or_404(Profile, id=request.user.id)
+	post = get_object_or_404(Post, id=post_id)
+	if post.profile != profile:
+		messages.add_message(request, messages.SUCCESS, "This job does not belong to you. Please select a job from the list below.")
+		return HttpResponseRedirect('/myPosts/')
+
+	if request.method == 'POST':
+		data = PostForm(request.POST, instance=post)
+		form = data.save(commit=False)
+		form.profile = profile
+		form.save()
+		messages.add_message(request, messages.SUCCESS, "Your job post has been updated successfully.")
+		return HttpResponseRedirect('/myPosts/')
+	else:
+		form = PostForm(instance=post)
+		context = {
+			'form': form,
+			'post': post,
+		}
+		return render(request, 'board/editPost.html', context)				
 
 def subscribe(request):
 	return HttpResponseRedirect('/')

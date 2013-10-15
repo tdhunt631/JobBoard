@@ -10,7 +10,7 @@
 	</script>
 {% endblock %}
 
-{% block title %}Create a job post{% endblock %}
+{% block title %}Edit post{% endblock %}
 {% block content %}
 	{% if messages %}
 		<div class="alert alert-success">
@@ -20,13 +20,13 @@
 		</div>
 	{% endif %}
 	<h2>Post a job</h2>
-	<form action="{% url 'board:post' %}" method="POST" id="postForm">
+	<form action="{% url 'board:editPost' post.id %}" method="POST" id="postForm">
 		<table class="table">
 			{% csrf_token %}
 			{{ form.as_table }}
 			<tr>
 				<td colspan="2">
-					<button type="submit" class="btn btn-primary pull-right">Post Job</button>
+					<button type="submit" class="btn btn-primary pull-right">Update Job</button>
 				</td>
 			</tr>
 		</table>

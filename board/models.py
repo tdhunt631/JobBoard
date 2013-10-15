@@ -63,3 +63,18 @@ class CreateProfileForm(ModelForm):
 		self.fields['contactName'].label = "Contact Name"
 		self.fields['contactEmail'].label = "Contact Email"
 
+class PostForm(ModelForm):
+	description = forms.CharField(widget=SummernoteWidget())  #replaced the TextArea widget
+
+	class Meta:
+		model = Post
+		fields = ['title','description','jobType','wage','expirationDate',]	
+	
+	def __init__(self, *args, **kwargs):
+		super(PostForm, self).__init__(*args, **kwargs)
+		self.fields['title'].label = "Job Title"
+		self.fields['description'].label = "Job Description"
+		self.fields['jobType'].label = "Job Type"
+		self.fields['expirationDate'].label = "Expiration Date"
+
+
