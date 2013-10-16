@@ -8,6 +8,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 LOGIN_REDIRECT_URL = '/'
+ENDLESS_PAGINATION_PER_PAGE = 10
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -120,9 +121,11 @@ TEMPLATE_DIRS = (
 	os.path.join(DIRNAME, "templates"),
 )
 
-import django.conf.global_settings as DEFAULT_SETTINGS
-TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
-'django.contrib.messages.context_processors.messages',
+
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+TEMPLATE_CONTEXT_PROCESSORS += (
+    'django.core.context_processors.request',
+	'django.contrib.messages.context_processors.messages',
 )
 
 INSTALLED_APPS = (
@@ -140,6 +143,7 @@ INSTALLED_APPS = (
 	'sorl.thumbnail',
 	'django_summernote',
 	'registration',
+	'endless_pagination',
 )
 
 

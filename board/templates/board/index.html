@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
+{% load endless %}
 
 {% block title %}Job Board{% endblock %} 
 
@@ -16,6 +17,7 @@
 	{% endif %}
 	<h2>Recent job listings</h2>
 	<table class="table table-striped">
+		{% paginate posts %}
 		{% for post in posts %}
 		<tr>
 			<td class="clearfix">
@@ -38,6 +40,7 @@
 			</td>
 		</tr>
 	{% endfor %}
+	{% show_pages %}
 	</table>
 {% endblock %}
 
