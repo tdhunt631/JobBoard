@@ -68,7 +68,7 @@ class PostForm(ModelForm):
 
 	class Meta:
 		model = Post
-		fields = ['title','description','jobType','wage','expirationDate',]	
+		fields = ['title','description','jobType','wage','expirationDate', 'active',]	
 	
 	def __init__(self, *args, **kwargs):
 		super(PostForm, self).__init__(*args, **kwargs)
@@ -76,5 +76,6 @@ class PostForm(ModelForm):
 		self.fields['description'].label = "Job Description"
 		self.fields['jobType'].label = "Job Type"
 		self.fields['expirationDate'].label = "Expiration Date"
+		self.fields['active'].label = "Currently Active?"
 
 

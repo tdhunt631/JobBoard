@@ -30,9 +30,9 @@
 			<td>{{ job.expirationDate }}</td>
 			<td>
 				{% if job.active == True %}
-					Active
+					<span style="color: green">Active</span>
 				{% else %}
-					Inactive
+					<span style="color: red">Inactive</span>
 				{% endif %}
 			</td>
 			<td>{{ job.views }}</td>

@@ -13,7 +13,31 @@
     			{{ message }}
     		{% endfor %}
 		</div>
-{% endif %}
-	I'm working now
+	{% endif %}
+	<h2>Recent job listings</h2>
+	<table class="table table-striped">
+		{% for post in posts %}
+		<tr>
+			<td class="clearfix">
+				<div class="pull-left">
+					<div><a href="{% url 'board:detail' post.id %}"><h3>{{ post.title }}</h3></a></div>
+					<div>{{ post.profile.companyName }}</div>
+				</div>
+				<div class="pull-right" style="margin: 7px 0 0 50px;">
+					<div>Detail Views</div>
+					<div class="text-center"><span class="badge">{{ post.views }}</span></div>
+				</div>
+				<div class="pull-right" style="margin: 7px 0 0 50px;">
+					<div>{{ post.jobType }}</div>
+					<div>{{ post.wage }}</div>
+				</div> 
+				<div class="pull-right" style="margin: 7px 0 0 10px;">
+					<div>Published: {{ post.publishDate }}</div>
+					<div>Expires: &nbsp; &nbsp; {{ post.expirationDate }}</div>
+				</div> 
+			</td>
+		</tr>
+	{% endfor %}
+	</table>
 {% endblock %}
 

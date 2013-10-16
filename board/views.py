@@ -7,19 +7,37 @@ from django.forms import ModelForm
 from board.models import *
 from django.template import RequestContext
 from django.contrib import messages
+import datetime
 
 def index(request):
+	#redirect newly registered users to the profile page.
 	if request.user.is_authenticated():
 		try:
 			profile = Profile.objects.get(user__username=request.user)
 		except:
 			return HttpResponseRedirect(reverse('board:createProfile'))
-
-	hello = "hello"
+	
+	#get all active jobs that aren't expired
+	posts = Post.objects.filter(active=True).exclude(expirationDate__lte=datetime.date.today()).order_by('-publishDate')[:10]
 	context = {
-		'hello': hello,
+		'posts': posts,
 	}
 	return render(request, 'board/index.html', context)
+
+def detail(request, post_id):
+	try:
+		post = get_object_or_404(Post, id=post_id)
+		if post.active == True:
+			#increment the number of times the job has been viewed
+			post.views += 1
+			post.save()
+			context = {
+				'post': post,
+			}
+			return render(request, 'board/detail.html', context)		
+	except:
+		messages.add_message(request, messages.SUCCESS, "Sorry, the job post was not found.")
+		return HttpResponseRedirect('/')
 
 @login_required
 def profile(request):
@@ -38,6 +56,7 @@ def profile(request):
 		form = CreateProfileForm(instance=profile)
 		context = {
 			'form': form,
+			'profile': profile,
 		}
 		return render(request, 'board/profile.html', context)
 
@@ -67,7 +86,7 @@ def createProfile(request):
 @login_required
 def myPosts(request):
 	profile = get_object_or_404(Profile, user=request.user.id)
-	jobs = Post.objects.filter(profile=profile)
+	jobs = Post.objects.filter(profile=profile).order_by('-publishDate')
 	context = {
 		'jobs': jobs,
 	}

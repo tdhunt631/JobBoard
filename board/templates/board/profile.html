@@ -2,12 +2,6 @@
 
 {% block title %}My Profile{% endblock %}
 
-{% block extrascripts %}
-	<style type="text/css">
-		h2 {margin: 0 0 20px 5px; padding: 0;}
-	</style> 
-{% endblock %}
-
 {% block content %}
 	<h2>Update your profile</h2>
 	<form action="{% url 'board:profile' %}" method="POST" id="profileForm" enctype="multipart/form-data">

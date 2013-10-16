@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %}{{ post.title }}{% endblock %} 
+
+{% block extrascripts %}
+{% endblock %}
+
+{% block content %}
+	{% if messages %}
+		<div class="alert alert-success">
+    		{% for message in messages %}
+    			{{ message }}
+    		{% endfor %}
+		</div>
+	{% endif %}
+	{% if post.profile.logo %}
+		<img src="{{ post.profile.logo.url }}">
+		<br>
+		<br>
+	{% endif %}
+	<h2>About the company</h2>
+	<table class="table">
+		<tr style="border: 0;">
+			<th style="border: 0; width: 300px">Company Name</th>	
+			<td style="border: 0;">{{ post.profile.companyName }} </td>
+		</tr>
+		<tr>
+			<th>Company Website</th>	
+			<td>{{ post.profile.website }} </td>
+		</tr>
+		<tr>
+			<th>Contact Name</th>
+			<td>{{ post.profile.contactName }}</span></td>
+		</tr>
+		<tr>
+			<th>Contact Email</th>
+			<td>{{ post.profile.contactEmail }}</span></td>
+		</tr>	
+	</table>
+	<h2>About the job</h2>
+	<table class="table">
+		<tr style="border: 0;">
+			<th style="border: 0; width: 300px">Job Title</th>	
+			<td style="border: 0;">{{ post.title }} </td>
+		</tr>
+		<tr>
+			<th>Job Description</th>	
+			<td>{{ post.description|safe }} </td>
+		</tr>
+		<tr>
+			<th>Job Type</th>	
+			<td>{{ post.jobType }} </td>
+		</tr>
+		<tr>
+			<th>Wage</th>	
+			<td>{{ post.wage }} </td>
+		</tr>
+		<tr>
+			<th>Open Till</th>	
+			<td>{{ post.expirationDate }} </td>
+		</tr>
+
+		<tr>
+			<th>Views</th>
+			<td><span class="badge">{{ post.views }}</span></td>
+		</tr>
+	</table>
+{% endblock %}
+
