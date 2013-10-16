@@ -18,7 +18,7 @@ def index(request):
 			return HttpResponseRedirect(reverse('board:createProfile'))
 	
 	#get all active jobs that aren't expired
-	posts = Post.objects.filter(active=True).exclude(expirationDate__lte=datetime.date.today()).order_by('-publishDate')
+	posts = Post.objects.filter(active=True).exclude(expirationDate__lte=datetime.date.today()).order_by('-publishDate')[:30]
 	context = {
 		'posts': posts,
 	}
