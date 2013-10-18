@@ -7,8 +7,21 @@ from django.forms import ModelForm
 from board.models import *
 from django.template import RequestContext
 from django.contrib import messages
+from django.utils import timezone
 import datetime
+from django.core.mail import send_mail
+from django.template.loader import get_template
+from django.template import Context
 
+def sendMail(subscribers, post):
+	emails = []
+	for subscriber in subscribers:
+		emails.append(subscriber.email)
+	send_mail('A new job has been posted!',
+	get_template('board/email.html').render(
+		Context({'post': post,})
+	), 'jobboarddixie@gmail.com', emails, fail_silently=False)
+	
 def index(request):
 	#redirect newly registered users to the profile page.
 	if request.user.is_authenticated():
@@ -27,7 +40,7 @@ def index(request):
 def detail(request, post_id):
 	try:
 		post = get_object_or_404(Post, id=post_id)
-		if post.active == True:
+		if post.active == True and post.expirationDate >= timezone.now():
 			#increment the number of times the job has been viewed
 			post.views += 1
 			post.save()
@@ -35,9 +48,11 @@ def detail(request, post_id):
 				'post': post,
 			}
 			return render(request, 'board/detail.html', context)		
+		messages.add_message(request, messages.SUCCESS, "Sorry, the job post was not found, or the job has expired.")
+		return HttpResponseRedirect(reverse('board:index'))
 	except:
 		messages.add_message(request, messages.SUCCESS, "Sorry, the job post was not found.")
-		return HttpResponseRedirect('/')
+		return HttpResponseRedirect(reverse('board:index'))
 
 @login_required
 def profile(request):
@@ -100,6 +115,10 @@ def post(request):
 		form = data.save(commit=False)
 		form.profile = profile
 		form.save()
+		# send email to notify subscribers
+		subscribers = Subscribe.objects.all()
+		if form.active == True:
+			sendMail(subscribers, form)
 		messages.add_message(request, messages.SUCCESS, "Thanks.  Your job has been posted successfully.")
 		return HttpResponseRedirect('/myPosts/')
 
@@ -134,9 +153,29 @@ def editPost(request, post_id):
 		return render(request, 'board/editPost.html', context)				
 
 def subscribe(request):
-	return HttpResponseRedirect('/')
+	if request.method == 'POST':
+		form = SubscribeForm(request.POST)
+		form.save()
+		messages.add_message(request, messages.SUCCESS, "Thanks! You will now be notified of new job posts.")
+		return HttpResponseRedirect(reverse('board:index'))
+	else:
+		form = SubscribeForm()
+		context = {
+			'form': form,
+		}
+	return render(request, 'board/subscribe.html', context)
 
 def unsubscribe(request):
-	return HttpResponseRedirect('/')
-
+	if request.method == 'POST':
+		subscriber = request.POST.get('email')
+		email = Subscribe.objects.filter(email=subscriber).delete()
+		messages.add_message(request, messages.SUCCESS, "Success! You will no longer be notified of new job posts.")
+		return HttpResponseRedirect(reverse('board:index'))
+	else:
+		form = UnsubscribeForm()
+		context = {
+			'form': form,
+		}
+		return render(request, 'board/unsubscribe.html', context)
+	
 

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block extrascripts %}
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script>
+		$(function() {
+			$( "#id_expirationDate" ).datepicker();
+		});
+	</script>
+{% endblock %}
+
+{% block title %}Subscribe{% endblock %}
+
+{% block content %}
+	{% if messages %}
+		<div class="alert alert-success">
+    		{% for message in messages %}
+    			{{ message }}
+    		{% endfor %}
+		</div>
+	{% endif %}
+	<h2>Subscribe</h2>
+	<p style="margin-left: 10px;">Subscribe to be notified of new job posts!</p>
+	<form action="{% url 'board:subscribe' %}" method="POST" id="subscribeForm">
+		<table class="table">
+			{% csrf_token %}
+			{{ form.as_table }}
+			<tr>
+				<td colspan="2">
+					<button type="submit" class="btn btn-primary pull-right">Subscribe</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+{% endblock %}

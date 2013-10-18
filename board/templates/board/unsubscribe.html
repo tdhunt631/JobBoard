@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block extrascripts %}
+{% endblock %}
+
+{% block title %}Unsubscribe{% endblock %}
+{% block content %}
+	{% if messages %}
+		<div class="alert alert-success">
+    		{% for message in messages %}
+    			{{ message }}
+    		{% endfor %}
+		</div>
+	{% endif %}
+	<h2>Unsubscribe</h2>
+	<p style="margin-left: 15px;">So you don't want to be notified of new job posts?  I hope it is because you found your dream job!<p>
+	<form action="{% url 'board:unsubscribe' %}" method="POST" id="unsubscribeForm">
+		{% csrf_token %}
+		<table class="table">
+			{{ form.as_table }}
+			<tr>
+				<td colspan="2">
+					<button type="submit" class="btn btn-primary pull-right">Unsubsribe</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+{% endblock %}

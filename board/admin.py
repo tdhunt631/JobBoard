@@ -7,7 +7,7 @@ class ProfileAdmin(AdminImageMixin, admin.ModelAdmin):
 	list_display = ('user', 'companyName', 'description', 'website', 'contactName', 'contactEmail', 'logo')
 
 class SubscribeAdmin(admin.ModelAdmin):
-	list_display = ('name', 'email', 'active')
+	list_display = ('name', 'email')
 
 class JobTypeAdmin(admin.ModelAdmin):
 	list_display = ('title',)

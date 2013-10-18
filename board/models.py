@@ -22,10 +22,12 @@ class Profile(models.Model):
 class Subscribe(models.Model):
 	name = models.CharField(max_length=50)
 	email = models.CharField(max_length=50)
-	active = models.BooleanField(default=True)
 	
 	def __unicode__(self):
 		return self.name
+	
+	class Meta:
+		verbose_name_plural = 'Subscribers'
 
 class JobType(models.Model):
 	title = models.CharField(max_length=30)
@@ -78,4 +80,12 @@ class PostForm(ModelForm):
 		self.fields['expirationDate'].label = "Expiration Date"
 		self.fields['active'].label = "Currently Active?"
 
+class SubscribeForm(ModelForm):
+	class Meta:
+		model = Subscribe
 
+class UnsubscribeForm(ModelForm):
+	class Meta:
+		model = Subscribe
+		fields = ['email',]
+		
